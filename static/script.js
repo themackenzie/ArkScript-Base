@@ -1,4 +1,3 @@
-
 let editor; 
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('files');
@@ -9,10 +8,33 @@ const outputElement = document.getElementById('output');
 let selectedFiles = []; 
 let currentView = 'icon'; 
 
+// --- FUNCIONES DE PLANTILLAS ---
+async function loadTemplateOptions() {
+    const select = document.getElementById('template-select');
+    if (!select) return;
+    try {
+        const response = await fetch('/get_templates');
+        const files = await response.json();
+        select.innerHTML = '<option value="">-- Seleccionar Plantilla --</option>';
+        files.forEach(filename => {
+            const option = document.createElement('option');
+            option.value = filename;
+            option.textContent = filename.replace('.txt', '').toUpperCase();
+            select.appendChild(option);
+        });
+    } catch (e) { console.error("Error plantillas:", e); }
+}
 
-
-
-
+async function applyTemplate(filename) {
+    if (!filename) return;
+    try {
+        const response = await fetch(`/get_template_content/${filename}`);
+        const content = await response.text();
+        if (editor) editor.setValue(content);
+    } catch (e) { alert("Error al cargar"); }
+    document.getElementById('template-select').value = "";
+}
+// --- FIN FUNCIONES DE PLANTILLAS ---
 
 if (typeof CodeMirror !== 'undefined') {
     CodeMirror.defineMode("arkscript", function() {
@@ -299,6 +321,11 @@ function preventDefaults (e) {
     e.stopPropagation();
 }
 
+// Prevenir comportamiento por defecto en toda la ventana para evitar que el navegador abra el archivo
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    window.addEventListener(eventName, preventDefaults, false);
+});
+
 dropZone.addEventListener('dragenter', highlight, false);
 dropZone.addEventListener('dragover', highlight, false);
 dropZone.addEventListener('dragleave', unhighlight, false);
@@ -317,7 +344,11 @@ function handleDrop(e) {
     unhighlight();
     const dt = e.dataTransfer;
     
-    const files = Array.from(dt.files).filter(file => file.name.endsWith('.txt') || file.name.endsWith('.pdf'));
+    // Mejorado para detectar mayúsculas (.TXT, .PDF)
+    const files = Array.from(dt.files).filter(file => 
+        file.name.toLowerCase().endsWith('.txt') || 
+        file.name.toLowerCase().endsWith('.pdf')
+    );
     
     if (files.length > 0) {
         uploadFiles(files); 
@@ -330,7 +361,10 @@ dropZone.addEventListener('click', () => {
 
 fileInput.addEventListener('change', (e) => {
     
-    const files = Array.from(e.target.files).filter(file => file.name.endsWith('.txt') || file.name.endsWith('.pdf'));
+    const files = Array.from(e.target.files).filter(file => 
+        file.name.toLowerCase().endsWith('.txt') || 
+        file.name.toLowerCase().endsWith('.pdf')
+    );
     if (files.length > 0) {
         uploadFiles(files); 
     }
@@ -358,6 +392,7 @@ async function initializeApp() {
     
     updateInputFileList(selectedFiles); 
     toggleView('icon'); 
+    loadTemplateOptions(); // <--- Única línea añadida aquí
 }
 
 document.addEventListener('DOMContentLoaded', () => {

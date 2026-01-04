@@ -16,6 +16,16 @@
 
         <div class="left-panel">
             <h2>Código DSL</h2>
+            
+            <div class="template-container" style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                <label for="template-select" style="font-size: 14px; font-weight: bold; color: #555;">
+                    <i class="fas fa-file-import"></i> Cargar Plantilla:
+                </label>
+                <select id="template-select" onchange="applyTemplate(this.value)" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; flex-grow: 1;">
+                    <option value="">-- Selecciona un ejemplo --</option>
+                </select>
+            </div>
+
             <textarea id="code-editor" class="cm-s-dracula" rows="20" cols="100">var data1 = "text01.txt",
 var data2 = "text02.pdf",
 var data3 = "work.pdf",
