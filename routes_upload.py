@@ -1,19 +1,23 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session # Se agregó session
 from werkzeug.utils import secure_filename
 import os
 import json 
 import time
 
-
-
 UPLOAD_FOLDER = 'temp_files'
-INPUT_FILES_METADATA = os.path.join(UPLOAD_FOLDER, 'input_files.json')
 
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+# --- MODIFICACIÓN: Función para obtener la ruta dinámica del usuario ---
+def get_user_folder():
+    user_id = session.get('user_id', 'default')
+    folder = os.path.join(UPLOAD_FOLDER, user_id)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    return folder
+
+def get_metadata_path():
+    return os.path.join(get_user_folder(), 'input_files.json')
 
 upload_bp = Blueprint('upload', __name__)
-
 
 ALLOWED_EXTENSIONS = ('.txt', '.pdf')
 
@@ -22,22 +26,22 @@ def is_allowed_file(filename):
     return filename.lower().endswith(ALLOWED_EXTENSIONS)
 
 def load_input_filenames():
-    """Carga la lista de nombres de archivos de entrada (ahora incluyendo .pdf) desde JSON."""
-    if os.path.exists(INPUT_FILES_METADATA):
-        with open(INPUT_FILES_METADATA, 'r') as f:
+    """Carga la lista de nombres de archivos de entrada desde el JSON del usuario."""
+    metadata_path = get_metadata_path() # Uso de ruta dinámica
+    if os.path.exists(metadata_path):
+        with open(metadata_path, 'r') as f:
             try:
                 all_files = json.load(f)
-                
                 return set(f for f in all_files if isinstance(f, str) and is_allowed_file(f))
             except json.JSONDecodeError:
                 return set()
     return set()
 
 def save_input_filenames(filenames_set):
-    """Guarda la lista de nombres de archivos de entrada en JSON."""
-    
+    """Guarda la lista de nombres de archivos de entrada en el JSON del usuario."""
+    metadata_path = get_metadata_path() # Uso de ruta dinámica
     clean_list = [f for f in filenames_set if is_allowed_file(f)]
-    with open(INPUT_FILES_METADATA, 'w') as f:
+    with open(metadata_path, 'w') as f:
         json.dump(clean_list, f)
 
 @upload_bp.route('/upload', methods=['POST'])
@@ -46,6 +50,7 @@ def upload_files():
     uploaded_filenames = []
     
     current_input_files = load_input_filenames()
+    user_folder = get_user_folder() # Obtener carpeta privada
     
     if not files or files[0].filename == '':
         return jsonify({"output": "Error: No se seleccionó ningún archivo para subir.", "error": True})
@@ -54,16 +59,15 @@ def upload_files():
         for file in files:
             if file and is_allowed_file(file.filename):  
                 filename = secure_filename(file.filename)
-                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                # --- MODIFICACIÓN: Guardar en la carpeta del usuario ---
+                filepath = os.path.join(user_folder, filename)
                 
                 file.save(filepath)
                 uploaded_filenames.append(filename)
                 
-                
                 current_input_files.add(filename)
                 
             elif file and file.filename:
-                
                 return jsonify({"output": f"Error de Archivo: El archivo '{file.filename}' debe ser .txt o .pdf.", "error": True})
         
         save_input_filenames(current_input_files)
