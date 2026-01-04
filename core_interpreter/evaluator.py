@@ -16,7 +16,7 @@ except ImportError:
     
 
 
-from .parser import VarDeclNode, SearchCommand, FusionCommand, ReplaceOverwriteCommand, CountCommand, EnumerateCommand, ExtractCommand, InvertCommand, FragmentCommand 
+from .parser import VarDeclNode, SearchCommand, FusionCommand, ReplaceOverwriteCommand, CountCommand, EnumerateCommand, ExtractCommand, InvertCommand, FragmentCommand, ConvertCommand # Agregado ConvertCommand
 
 class Evaluator:
     FILE_DIR = "."  
@@ -36,6 +36,7 @@ class Evaluator:
             ExtractCommand: self.handle_extract,
             InvertCommand: self.handle_invert,
             FragmentCommand: self.handle_fragment, 
+            ConvertCommand: self.handle_convert, # Agregado el handler de conversión
         }
 
 
@@ -197,6 +198,31 @@ class Evaluator:
     
 
     
+    def handle_convert(self, command: ConvertCommand):
+        """
+        Convierte archivos entre PDF y TXT.
+        """
+        print(f"    [CONVERTIR]: Iniciando proceso de conversión...")
+        try:
+            source_file_name = self.resolve_source(command.source_file, command.source_is_var)
+            target_file_name = self.resolve_source(command.target_file, command.target_is_var)
+            
+            source_file_path = self.resolve_file_path(source_file_name)
+            target_file_path = self.resolve_file_path(target_file_name)
+            
+            # Leer el contenido del origen
+            content = self._read_content(source_file_name, source_file_path)
+            
+            if content is None:
+                print(f"    ERROR [CONVERTIR]: No se pudo obtener el contenido de '{source_file_name}'.")
+                return
+            
+            # Escribir en el nuevo formato usando la lógica centralizada de _write_output
+            self._write_output(content, target_file_name, target_file_path, "CONVERTIR")
+            
+        except Exception as e:
+            print(f"    ERROR [CONVERTIR]: Fallo inesperado: {e}")
+
 
     def handle_fragment(self, command: FragmentCommand):
         """
@@ -242,6 +268,7 @@ class Evaluator:
         
         fragment_count = 0
         for i, fragment in enumerate(fragments):
+            
             
             
             
