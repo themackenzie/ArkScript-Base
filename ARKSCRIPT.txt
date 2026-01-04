@@ -1,0 +1,49 @@
+//Comentario
+
+
+var archivo = "text.txt",
+var archivopdf = "text1.pdf",
+var cadena = "cadenas",
+
+
+//BUSQUEDA
+buscar repeticiones de "cadena" de archivo,
+buscar repeticiones de "cadena" de archivo,
+buscar repeticiones de cadena de "text.txt",
+
+buscar repeticiones de "cadena" de archivo con sensibilidad,
+buscar repeticiones de "cadena" de archivo sin sensibilidad,
+
+
+
+//FUSIONAR
+fusionar archivo con archivopdf separado_por "__?___" en "text03.txt",
+fusionar archivo con archivopdf separado_por cadena en "text03.txt",
+
+
+//REEMPLAZAR Y SOBREESCRIBIR
+
+reemplazar todo "INFORMACIÓN_A_REEMPLAZAR" con "DATOS_REEMPLAZADOS" de archivo en archivopdf,
+reemplazar 20 "INFORMACIÓN_A_REEMPLAZAR" con "DATOS_REEMPLAZADOS" de archivo en archivopdf,
+reemplazar 20 "INFORMACIÓN_A_REEMPLAZAR" con "DATOS_REEMPLAZADOS" CADA 1 de archivo en archivopdf,
+reemplazar 5 separador con separador de archivo en archivopdf,
+sobreescribir todo "INFORMACIÓN" con "DATAFORMATION" de archivo en "pdf5.pdf",
+
+
+
+//ENUMERAR
+ENUMERAR "{POSAXD}" DESDE 20 HASTA 50 de doc1 en doc6,
+ENUMERAR "CAUSAOE" DESDE 90 HASTA 0 de doc3 en doc7,
+
+
+//EXTRAER - Solo PDF
+extraer de "archivo.pdf" desde 5 hasta 20 en "pagina.pdf",
+
+
+//FRAGMENTAR - Solo TXT
+//ADVERTENCIA, cada fragmento se almacenará con un número único, siendo el primer fragmento 1, 2, etc
+fragmentar de "texto01.txt" por "lineadefragmentación" en "frag.txt",
+
+
+//INVERTIR - Solo PDF
+invertir de "archivo.pdf" en "inverso.pdf",

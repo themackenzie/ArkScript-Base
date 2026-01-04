@@ -1,0 +1,25 @@
+var data1 = "text01.txt",
+var data2 = "text02.pdf",
+var data3 = "work.pdf",
+var cadena = "IMAGEN",
+var n_cadena = "IMAGEN{X} ",
+
+
+
+//buscar repeticiones de cadena de data1,
+
+//fusionar data1 con data2 separado_por "SEPARADOR" en "text03.pdf",
+//fusionar "work.pdf" con data2 separado_por cadena en "text04.txt",
+
+
+//reemplazar todo "IMAGEN" con n_cadena de data1 en "text06.pdf",
+
+//sobreescribir todo "IMAGEN" con "ZENLESS" de data1 en "pdf7.pdf",
+
+//enumerar "{X}" desde 1 hasta 50 de "textA.pdf" en "textB.pdf",
+
+//extraer de data3 desde 5 hasta 20 en "parte.pdf",
+
+//invertir de "parte.pdf" en "parte.pdf"
+
+//fragmentar de "text03.txt" por "LINEA_DE_FRAGMENTACION" en "frags.txt",
