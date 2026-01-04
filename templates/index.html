@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intérprete Web de Gestor de Archivos (DSL)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=cache_buster) }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+</head>
+<body>
+    <h1>ArkScript</h1>
+
+    <div class="main-container">
+
+        <div class="left-panel">
+            <h2>Código DSL</h2>
+            <textarea id="code-editor" class="cm-s-dracula" rows="20" cols="100">var data1 = "text01.txt",
+var data2 = "text02.pdf",
+var data3 = "work.pdf",
+var cadena = "IMAGEN",
+var n_cadena = "IMAGEN{X} ",
+
+
+buscar repeticiones de cadena de data1,
+
+//fusionar data1 con data2 separado_por "SEPARADOR" en "text03.pdf",
+//fusionar "work.pdf" con data2 separado_por cadena en "text04.txt",
+
+
+//reemplazar todo "IMAGEN" con n_cadena de data1 en "text06.pdf",
+
+//sobreescribir todo "IMAGEN" con "ZENLESS" de data1 en "pdf7.pdf",
+
+//enumerar "{X}" desde 1 hasta 50 de "textA.pdf" en "textB.pdf",
+
+//extraer de data3 desde 5 hasta 20 en "parte.pdf",
+
+//invertir de "parte.pdf" en "parte.pdf"
+
+//fragmentar de "text03.txt" por "LINEA_DE_FRAGMENTACION" en "frags.txt",
+</textarea>
+            <button onclick="runCode()"><i class="fas fa-play"></i> Ejecutar Código</button>
+            
+            <div id="output-container">
+                <h3><i class="fas fa-terminal"></i> Consola de Salida</h3>
+                <pre id="output">Esperando ejecución...</pre>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2>Gestor de Archivos</h2>
+
+            <div class="files-container">
+                <div class="tab-bar">
+                    <div class="tab-buttons-group">
+                        <button id="tab-input" class="tab-button active" onclick="showTab('input')">
+                            <i class="fas fa-folder-open"></i> Entrada
+                        </button>
+                        <button id="tab-output" class="tab-button" onclick="showTab('output')">
+                            <i class="fas fa-save"></i> Salida
+                        </button>
+                    </div>
+
+                    <div id="view-options" class="view-buttons-group">
+                        <button class="view-button active" id="view-icon-btn" onclick="toggleView('icon')">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-button" id="view-list-btn" onclick="toggleView('list')">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="content-input" class="tab-content">
+                    <div id="drop-zone">
+                        <p><i class="fas fa-cloud-upload-alt"></i> Arrastra y suelta archivos **.txt o .pdf** aquí o haz clic.</p>
+                        <input type="file" id="files" name="files" accept=".txt, .pdf" multiple>
+                    </div>
+                    <ul id="input-file-list" class="file-list icon-view">
+                        <li style="padding: 10px; color: #888;">No hay archivos cargados.</li>
+                    </ul>
+                </div>
+
+                <div id="content-output" class="tab-content" style="display: none;">
+                    <ul id="output-file-list" class="file-list icon-view" data-filenames="[]">
+                        <li style="padding: 10px; color: #888;">Archivos generados por el código aparecerán aquí.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    
+    <script src="{{ url_for('static', filename='script.js', v=cache_buster) }}"></script>
+</body>
+</html>
