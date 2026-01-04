@@ -30,7 +30,8 @@ class Lexer:
         'contar': 'KW_CONTAR',
         'extraer': 'KW_EXTRAER',
         'invertir': 'KW_INVERTIR',
-        'fragmentar': 'KW_FRAGMENTAR', 
+        'fragmentar': 'KW_FRAGMENTAR',
+        'convertir': 'KW_CONVERTIR',
         
         
         'repeticiones': 'KW_REPETICIONES',
