@@ -24,6 +24,16 @@ class SearchCommand:
         return f'Search(term={repr(self.search_term)}, target={repr(self.target)}, sens={self.sensitivity})'
 
 
+class ConvertCommand:
+    def __init__(self, source_file, source_is_var, target_file, target_is_var):
+        self.source_file = source_file
+        self.source_is_var = source_is_var
+        self.target_file = target_file
+        self.target_is_var = target_is_var
+    def __repr__(self):
+        return f'CONVERTIR(src={repr(self.source_file)}, target={repr(self.target_file)})'
+
+
 
 class EnumerateCommand:
     def __init__(self, source, source_is_var, start_num, end_num, source_doc, source_is_var_doc, target_file, target_is_var):
@@ -167,6 +177,8 @@ class Parser:
                 nodes.append(self.parse_extract_command()) 
             elif self.current_token.type == 'KW_FRAGMENTAR': 
                 nodes.append(self.parse_fragment_command())   
+            elif self.current_token.type == 'KW_CONVERTIR': # Cambio agregado
+                nodes.append(self.parse_convert_command())  # Cambio agregado
             else:
                 self.error(['KW_VAR', 'Comando'])
             
@@ -200,6 +212,23 @@ class Parser:
              self.error(['COMMA', 'Inicio de Comando'])
 
         return declarations
+
+
+    def parse_convert_command(self):
+        """Analiza la estructura: CONVERTIR DE <origen> EN <destino>"""
+        self.consume('KW_CONVERTIR')
+        self.consume('KW_DE')
+        
+        source_file, source_is_var = self._parse_string_or_identifier()
+
+        self.consume('KW_EN')
+        
+        target_file, target_is_var = self._parse_string_or_identifier()
+        
+        return ConvertCommand(
+            source_file, source_is_var,
+            target_file, target_is_var
+        )
 
 
     def parse_fragment_command(self):

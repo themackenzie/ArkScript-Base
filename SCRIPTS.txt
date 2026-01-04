@@ -23,3 +23,5 @@ var n_cadena = "IMAGEN{X} ",
 //invertir de "parte.pdf" en "parte.pdf"
 
 //fragmentar de "text03.txt" por "LINEA_DE_FRAGMENTACION" en "frags.txt",
+
+//convertir de "archivo.pdf" en "nuevo.txt",

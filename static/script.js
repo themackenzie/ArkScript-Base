@@ -52,6 +52,7 @@ if (typeof CodeMirror !== 'undefined') {
             "extraer": "keyword",
             "invertir": "keyword",
             "fragmentar": "keyword",
+            "convertir": "keyword",
             
             
             "separado_por": "builtin",
@@ -414,3 +415,4 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initializeApp(); 
 });
+
