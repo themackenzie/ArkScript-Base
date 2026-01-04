@@ -47,3 +47,6 @@ fragmentar de "texto01.txt" por "lineadefragmentación" en "frag.txt",
 
 //INVERTIR - Solo PDF
 invertir de "archivo.pdf" en "inverso.pdf",
+
+//CONVERTIR
+convertir de "archivo.pdf" en "nuevo.txt",
